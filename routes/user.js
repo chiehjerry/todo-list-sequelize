@@ -10,6 +10,17 @@ router.get('/login', (req, res) => {
   res.render('login')
 })
 // 登入檢查
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+  })(req, res, next)
+})
+// 註冊頁面
+router.get('/register', (req, res) => {
+  res.render('register')
+})
+// 註冊檢查
 router.post('/register', (req, res) => {
   const { name, email, password, password2 } = req.body
   User.findOne({ where: { email: email } }).then(user => {
@@ -35,14 +46,6 @@ router.post('/register', (req, res) => {
         .catch(err => console.log(err))
     }
   })
-})
-// 註冊頁面
-router.get('/register', (req, res) => {
-  res.render('register')
-})
-// 註冊檢查
-router.post('/register', (req, res) => {
-  res.send('註冊檢查')
 })
 // 登出
 router.get('/logout', (req, res) => {
